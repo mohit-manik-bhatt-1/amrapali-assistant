@@ -1,5 +1,56 @@
-Amrapali University, Haldwani.
-MCA Course Fee: All India ₹63,000 per semester, UK Domicile ₹47,250 per semester.
-Hostel Charges: ₹72,000 per academic year including mess facilities.
-Eligibility: BCA/B.Sc/B.Com/BA with Mathematics at 10+2 level or graduation level with 50% marks.
-Admissions Office Contact: admission@amrapali.ac.in
+=== ABOUT AMRAPALI UNIVERSITY HALDWANI ===
+- Name: Amrapali University (AU), formerly Amrapali Group of Institutes (AGI).
+- Established: Founded in 1999 under the aegis of Modern Academy Educational Society.
+- Status & Recognition: UGC recognized State Private University (UGC Act 1956). Approved by AICTE, PCI (Pharmacy Council of India), NCTE.
+- Location: Shiksha Nagar, Lamachaur, Haldwani, Nainital, Uttarakhand - 263139.
+- Campus: 19-acre lush green, pollution-free campus with Wi-Fi connectivity, CCTV surveillance, 4000+ students, and 200+ faculty members.
+- Official Email: admission@amrapali.ac.in | query@amrapali.ac.in
+- Official Website: https://amrapali.ac.in
+
+=== ACADEMIC FACULTIES & DEPARTMENTS ===
+1. Faculty of Technology & Computer Applications (FOTCA): B.Tech (CSE, AI/ML, Data Science), BCA, MCA.
+2. Faculty of Commerce & Business Management (FOCBM): BBA, B.Com (Hons), MBA (Dual Specialization: HR, Finance, Marketing, IT).
+3. Faculty of Hospitality Management (FOHM): BHM, BHMCT, Diploma in Hotel Management, Diploma in Food Production.
+4. Faculty of Pharmacy: B.Pharm, D.Pharm.
+5. Faculty of Education: B.Ed.
+6. Applied Sciences & Humanities: B.Sc, M.Sc courses.
+
+=== DETAILED FEE STRUCTURE (APPROX. PER SEMESTER / YEAR) ===
+- MCA: All India students: ~₹63,000 per semester. Uttarakhand Domicile students: ~₹47,250 per semester (25% rebate).
+- BCA: ₹35,000 - ₹45,000 per semester depending on state quota and specialization.
+- B.Tech (CSE / Emerging Tech): ₹45,000 - ₹65,000 per semester. Total 4-year tuition: ₹3.90L - ₹6.50L.
+- MBA: Total tuition fee approx ₹1.80L - ₹4.14L across 2 years. Uttarakhand quota fee concession applicable.
+- BHM / BHMCT: ~₹60,000 - ₹63,000 per year / semester depending on specific degree or diploma option.
+- B.Pharm: Total tuition ranges ₹3.42L - ₹4.56L for 4 years with state domicile concessions.
+- D.Pharm / Diplomas: Ranges from ₹40,000 to ₹60,000 annually.
+- Note on Domicile: Students having an Uttarakhand Domicile certificate receive a 25% to 26% fee rebate on standard tuition.
+
+=== ELIGIBILITY & ADMISSIONS ===
+- MCA: Pass in BCA / B.Sc / B.Com / BA with Mathematics at 10+2 level or at graduation level with minimum 50% marks (45% for reserved category).
+- BCA / BBA / B.Com: 10+2 from any recognized board (CBSE, ISC, Uttarakhand Board) with minimum 45% - 50% aggregate.
+- B.Tech: 10+2 with Physics, Mathematics, and Chemistry/CS with minimum 45% marks. Valid JEE Main scores preferred.
+- MBA: Bachelor's degree in any discipline with minimum 50% aggregate. CAT, MAT, or CMAT scores accepted.
+- Admission Modes: Direct merit-based registration through 10+2/graduation marks, CUET scores, or campus walk-in counseling.
+
+=== INFRASTRUCTURE & CAMPUS FACILITIES ===
+- High-Tech Labs: Central computing center, high-speed fiber internet, specialized coding labs, electronics labs, and pharmaceutics labs.
+- Hospitality Simulation Suites: Basic training kitchen, advance training kitchen, quantity food kitchen, bakery & confectionary labs, mock bar, front office simulation lab, housekeeping suite, and 100-cover training restaurant.
+- Central Library: Fully automated library housing over 80,000+ volumes, 12,000+ titles, DELNET membership, digital subscriptions, IEEE/Springer journals, and e-learning resources.
+- Classrooms: Modern smart lecture halls equipped with LCD projectors, audio systems, and ergonomic seating.
+- Auditorium & Seminar Halls: Air-conditioned auditorium with 500+ seating capacity and multiple AV-enabled conference halls.
+- Sports & Gym: Large outdoor playgrounds for cricket, football, volleyball, basketball court, and indoor recreation center (table tennis, chess, carrom, gym).
+- Cafeteria: Multi-cuisine cafeteria maintaining strict hygiene standards, serving breakfast, lunch, and snacks.
+- Medical Facilities: On-campus first-aid infirmary, 24/7 dedicated ambulance, and tie-ups with nearby multi-specialty hospitals.
+
+=== HOSTEL & ACCOMMODATION ===
+- Separate Hostels: Dedicated, secured multi-story hostels for boys and girls inside/near campus.
+- Security: 24/7 biometric security guards, CCTV surveillance, and resident wardens.
+- Hostel Charges: ~₹60,000 to ₹72,000 per academic year (Standard Non-AC room including 4 meals a day: breakfast, lunch, evening tea/snacks, dinner).
+- Room Options: Double and triple sharing available. Power backup and RO drinking water plants on every floor.
+
+=== PLACEMENTS & INDUSTRY COLLABORATION ===
+- Placement Division: Central Training and Placement Department (CTPD) & Placement and Industry Interaction Cell (PIIC).
+- Highest Package Offered: Up to ₹24 LPA. Average package ranges ₹4.5 LPA - ₹9 LPA depending on branch.
+- Top Tech & Corporate Recruiters: TCS, Deloitte, Wipro, Accenture, Tech Mahindra, Infosys, Oracle, Schneider Electric, HCL, TVS, ICICI Bank.
+- Top Hospitality Recruiters: The Oberoi, The Taj Group, The Ritz-Carlton, Trident, Hyatt, Marriott, Radisson, ITC Hotels.
+- Training Programs: Regular soft-skills training, mock interviews, aptitude workshops, and coding bootcamps for final/pre-final year students.
