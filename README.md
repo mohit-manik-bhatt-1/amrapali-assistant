@@ -42,6 +42,30 @@
  │   Prompt Augmentation &      │
  │ Strict Context Verification  │
  └──────────────┬───────────────┘
+---
+
+## 📋 Comparative Analysis
+
+| Dimension | Standard Campus Chatbots | Amrapali AI Assistant |
+| :--- | :--- | :--- |
+| **Response Latency** | 4–7 seconds batch wait | **Instant sub-second token streaming** |
+| **Context Grounding** | Generic public LLM memory | **ChromaDB vector retrieval (Strict RAG)** |
+| **State Quota Intelligence** | Ignores domicile status | **Automates 25% Uttarakhand concession** |
+| **Interface Controls** | Single plain prompt input | **Action chips, session reset, export tool** |
+| **Credential Security** | Risk of hardcoded tokens | **Encrypted Cloud Secrets management** |
+
+---
+
+## 🗂️ Project Structure
+
+```text
+amrapali-assistant/
+├── .streamlit/
+│   └── secrets.toml          # Local environment API keys (git-ignored)
+├── amrapali_data.txt         # University prospectus, courses, fees, hostels
+├── requirements.txt          # Production dependencies
+├── streamlit_app.py          # Main application & interactive UI
+└── README.md                 # Project architecture & documentation
                 │
                 ▼
      [ Groq / Gemini LPU Engine ]
