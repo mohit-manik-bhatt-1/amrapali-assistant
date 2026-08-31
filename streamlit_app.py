@@ -13,6 +13,17 @@ st.set_page_config(
     layout="centered"
 )
 
+# UI Header
+st.markdown(
+    """
+    <div style='text-align: center; padding: 18px; background: linear-gradient(135deg, #0f172a, #1e3a8a, #0284c7); color: white; border-radius: 12px; margin-bottom: 20px;'>
+        <h2 style='margin:0; font-size: 24px;'>Amrapali University AI Assistant</h2>
+        <p style='margin:5px 0 0 0; opacity: 0.9;'>Official Campus Digital Helpdesk • Running on Gemini 3.6 Flash</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 # 1. API Client Setup
 api_key = st.secrets.get("GOOGLE_API_KEY") or os.environ.get("GOOGLE_API_KEY")
 if not api_key:
@@ -21,37 +32,7 @@ if not api_key:
 
 client = genai.Client(api_key=api_key)
 
-# 2. Automatically Detect Supported Model
-@st.cache_resource
-def get_supported_model():
-    candidates = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]
-    try:
-        available = []
-        for m in client.models.list():
-            actions = getattr(m, "supported_actions", None) or getattr(m, "supported_generation_methods", [])
-            if any("generateContent" in act for act in actions):
-                available.append(m.name.replace("models/", ""))
-        for cand in candidates:
-            if cand in available:
-                return cand
-        return available[0] if available else "gemini-2.5-flash"
-    except Exception:
-        return "gemini-2.5-flash"
-
-ACTIVE_MODEL = get_supported_model()
-
-# 3. Custom UI Header
-st.markdown(
-    f"""
-    <div style='text-align: center; padding: 18px; background: linear-gradient(135deg, #0f172a, #1e3a8a, #0284c7); color: white; border-radius: 12px; margin-bottom: 20px;'>
-        <h2 style='margin:0; font-size: 24px;'>Amrapali University AI Assistant</h2>
-        <p style='margin:5px 0 0 0; opacity: 0.9;'>Official Campus Digital Helpdesk • Active Model: {ACTIVE_MODEL}</p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-
-# 4. Knowledge Base Setup
+# 2. Knowledge Base & Vector Store Setup
 @st.cache_resource
 def load_knowledge_base():
     if os.path.exists("amrapali_data.txt"):
@@ -68,18 +49,34 @@ def load_knowledge_base():
 
 retriever = load_knowledge_base()
 
-# 5. Session State
+# 3. Session State for Messages
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {"role": "assistant", "content": "Hello! I am the Amrapali University AI Assistant. How can I help you today with admissions, courses, fees, or campus facilities?"}
     ]
 
+# Preset Buttons
+col1, col2, col3, col4 = st.columns(4)
+suggested_prompt = None
+with col1:
+    if st.button("💰 MCA & BTech Fees"):
+        suggested_prompt = "What is the fee structure for MCA and B.Tech?"
+with col2:
+    if st.button("🏢 Campus & Labs"):
+        suggested_prompt = "Tell me about the university infrastructure, computer labs, and library."
+with col3:
+    if st.button("🛏️ Hostel Facilities"):
+        suggested_prompt = "What are the hostel charges, room types, and mess facilities?"
+with col4:
+    if st.button("💼 Placements"):
+        suggested_prompt = "What are the placement statistics and top recruiting companies?"
+
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# 6. User Query Handling
-user_query = st.chat_input("Ask about Amrapali University...")
+# 4. Handle Input
+user_query = st.chat_input("Ask about Amrapali University...") or suggested_prompt
 
 if user_query:
     st.session_state.messages.append({"role": "user", "content": user_query})
@@ -92,24 +89,32 @@ if user_query:
 
         system_instruction = (
             "You are the official Amrapali University AI Assistant. "
-            "Answer politely and professionally using ONLY the provided context. "
+            "Answer politely and professionally using ONLY the provided context below. "
             "Use clear bullet points and bold keys. "
-            "If details cannot be found, advise contacting admission@amrapali.ac.in.\n\n"
+            "If details cannot be found in context, instruct the user to contact admission@amrapali.ac.in.\n\n"
             f"Context Data:\n{context_text}"
         )
 
-        def stream_response():
+        with st.spinner("Thinking..."):
             try:
-                response_stream = client.models.generate_content_stream(
-                    model=ACTIVE_MODEL,
-                    contents=user_query,
-                    config={"system_instruction": system_instruction}
+                # Interactions API invocation (standard for Gemini 3.6 Flash)
+                interaction = client.interactions.create(
+                    model="gemini-3.6-flash",
+                    input=user_query,
+                    system_instruction=system_instruction
                 )
-                for chunk in response_stream:
-                    if chunk.text:
-                        yield chunk.text
-            except Exception as err:
-                yield f"Error calling {ACTIVE_MODEL}: {str(err)}"
+                reply = interaction.outputs[-1].text
+            except Exception as e1:
+                # Fallback to generate_content if interactions endpoint differs on your environment
+                try:
+                    res = client.models.generate_content(
+                        model="gemini-3.6-flash",
+                        contents=user_query,
+                        config={"system_instruction": system_instruction}
+                    )
+                    reply = res.text
+                except Exception as e2:
+                    reply = f"API Error: {str(e2)}"
 
-        reply = st.write_stream(stream_response)
+        st.markdown(reply)
         st.session_state.messages.append({"role": "assistant", "content": reply})
