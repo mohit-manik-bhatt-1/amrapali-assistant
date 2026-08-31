@@ -13,12 +13,13 @@ st.markdown(
     """
     <div style='text-align: center; padding: 18px; background: linear-gradient(135deg, #0f172a, #1e3a8a, #0284c7); color: white; border-radius: 12px; margin-bottom: 20px;'>
         <h2 style='margin:0; font-size: 24px;'>Amrapali University AI Assistant</h2>
-        <p style='margin:5px 0 0 0; opacity: 0.9;'>Official Campus Digital Helpdesk</p>
+        <p style='margin:5px 0 0 0; opacity: 0.9;'>Official Campus Digital Helpdesk • Ultra-Fast Inference</p>
     </div>
     """,
     unsafe_allow_html=True
 )
 
+# 1. Groq Client Authentication
 api_key = st.secrets.get("GROQ_API_KEY") or os.environ.get("GROQ_API_KEY")
 if not api_key:
     st.error("Please add GROQ_API_KEY in Streamlit Secrets.")
@@ -26,6 +27,7 @@ if not api_key:
 
 client = Groq(api_key=api_key)
 
+# 2. Vector DB Setup (Amrapali University Knowledge Base)
 @st.cache_resource
 def load_knowledge_base():
     if os.path.exists("amrapali_data.txt"):
@@ -42,11 +44,13 @@ def load_knowledge_base():
 
 retriever = load_knowledge_base()
 
+# 3. Chat State
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {"role": "assistant", "content": "Hello! I am the Amrapali University AI Assistant. How can I help you today with admissions, courses, fees, or campus facilities?"}
     ]
 
+# Preset Action Chips
 col1, col2, col3, col4 = st.columns(4)
 suggested_prompt = None
 with col1:
@@ -86,17 +90,22 @@ if user_query:
         )
 
         def stream_groq():
-            completion = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[
-                    {"role": "system", "content": system_instruction},
-                    {"role": "user", "content": user_query}
-                ],
-                stream=True
-            )
-            for chunk in completion:
-                if chunk.choices[0].delta.content:
-                    yield chunk.choices[0].delta.content
+            # Production model available on every free Groq tier
+            model_to_use = "llama-3.1-8b-instant"
+            try:
+                completion = client.chat.completions.create(
+                    model=model_to_use,
+                    messages=[
+                        {"role": "system", "content": system_instruction},
+                        {"role": "user", "content": user_query}
+                    ],
+                    stream=True
+                )
+                for chunk in completion:
+                    if chunk.choices and chunk.choices[0].delta.content:
+                        yield chunk.choices[0].delta.content
+            except Exception as e:
+                yield f"Model Error: {str(e)}"
 
         reply = st.write_stream(stream_groq)
         st.session_state.messages.append({"role": "assistant", "content": reply})
