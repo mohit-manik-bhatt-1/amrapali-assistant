@@ -13,104 +13,73 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom Styling
-st.markdown("""
-<style>
-    .main-header {
-        background: linear-gradient(135deg, #0f172a, #1e3a8a, #0284c7);
-        padding: 24px;
-        border-radius: 14px;
-        color: white;
-        text-align: center;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    .main-header h1 {
-        font-size: 26px;
-        font-weight: 800;
-        margin-bottom: 6px;
-        color: #f8fafc;
-    }
-    .main-header p {
-        font-size: 14px;
-        color: #cbd5e1;
-        margin: 0;
-    }
-    .stButton>button {
-        border-radius: 20px;
-        font-size: 13px;
-        padding: 4px 16px;
-        border: 1px solid #0284c7;
-        background-color: transparent;
-        transition: all 0.2s ease;
-    }
-    .stButton>button:hover {
-        background-color: #0284c7;
-        color: white;
-    }
-</style>
-
-<div class="main-header">
-    <h1>Amrapali University Smart AI</h1>
-    <p>Admissions • Degree Programs • Fee Structure • Hostels • Placements</p>
-</div>
-""", unsafe_allow_html=True)
-
 # 1. API Client Setup
-api_key = st.secrets.get("GOOGLE_API_KEY")
+api_key = st.secrets.get("GOOGLE_API_KEY") or os.environ.get("GOOGLE_API_KEY")
 if not api_key:
     st.error("Google API key is missing. Add it to Streamlit Secrets.")
     st.stop()
 
 client = genai.Client(api_key=api_key)
 
-# 2. Optimized Vector Store (Cached in memory)
+# 2. Automatically Detect Supported Model
+@st.cache_resource
+def get_supported_model():
+    candidates = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]
+    try:
+        available = []
+        for m in client.models.list():
+            actions = getattr(m, "supported_actions", None) or getattr(m, "supported_generation_methods", [])
+            if any("generateContent" in act for act in actions):
+                available.append(m.name.replace("models/", ""))
+        for cand in candidates:
+            if cand in available:
+                return cand
+        return available[0] if available else "gemini-2.5-flash"
+    except Exception:
+        return "gemini-2.5-flash"
+
+ACTIVE_MODEL = get_supported_model()
+
+# 3. Custom UI Header
+st.markdown(
+    f"""
+    <div style='text-align: center; padding: 18px; background: linear-gradient(135deg, #0f172a, #1e3a8a, #0284c7); color: white; border-radius: 12px; margin-bottom: 20px;'>
+        <h2 style='margin:0; font-size: 24px;'>Amrapali University AI Assistant</h2>
+        <p style='margin:5px 0 0 0; opacity: 0.9;'>Official Campus Digital Helpdesk • Active Model: {ACTIVE_MODEL}</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# 4. Knowledge Base Setup
 @st.cache_resource
 def load_knowledge_base():
     if os.path.exists("amrapali_data.txt"):
         loader = TextLoader("amrapali_data.txt")
         docs = loader.load()
     else:
-        docs = [Document(page_content="Amrapali University, Haldwani. Comprehensive campus portal.")]
+        docs = [Document(page_content="Amrapali University Haldwani. MCA Fee: ₹63,000. Hostel: ₹72,000.")]
     
     splitter = RecursiveCharacterTextSplitter(chunk_size=450, chunk_overlap=40)
     chunks = splitter.split_documents(docs)
     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     vectorstore = Chroma.from_documents(chunks, embeddings)
-    return vectorstore.as_retriever(search_kwargs={"k": 3})
+    return vectorstore.as_retriever(search_kwargs={"k": 2})
 
 retriever = load_knowledge_base()
 
-# 3. Session State Initialization
+# 5. Session State
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "Hello! I am the official digital assistant for Amrapali University, Haldwani. How can I help you today with admissions, courses, fees, or campus life?"}
+        {"role": "assistant", "content": "Hello! I am the Amrapali University AI Assistant. How can I help you today with admissions, courses, fees, or campus facilities?"}
     ]
 
-# 4. Quick Suggestion Chips
-col1, col2, col3, col4 = st.columns(4)
-suggested_prompt = None
-
-with col1:
-    if st.button("💰 MCA & BTech Fees"):
-        suggested_prompt = "What is the fee structure for MCA and B.Tech (including UK domicile discount)?"
-with col2:
-    if st.button("🏢 Campus & Labs"):
-        suggested_prompt = "Tell me about the university infrastructure, computer labs, and library."
-with col3:
-    if st.button("🛏️ Hostel Facilities"):
-        suggested_prompt = "What are the hostel charges, room types, and mess facilities?"
-with col4:
-    if st.button("💼 Placements"):
-        suggested_prompt = "What are the placement statistics and top recruiting companies?"
-
-# 5. Display Previous Chat Messages
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# 6. Process User Input (Input box or Clicked chip)
-user_query = st.chat_input("Ask any question about Amrapali University...") or suggested_prompt
+# 6. User Query Handling
+user_query = st.chat_input("Ask about Amrapali University...")
 
 if user_query:
     st.session_state.messages.append({"role": "user", "content": user_query})
@@ -118,28 +87,29 @@ if user_query:
         st.markdown(user_query)
 
     with st.chat_message("assistant"):
-        # Retrieve context from ChromaDB
         matched_docs = retriever.invoke(user_query)
         context_text = "\n\n".join(d.page_content for d in matched_docs)
 
         system_instruction = (
             "You are the official Amrapali University AI Assistant. "
-            "Respond politely, professionally, and authoritatively using ONLY the context provided below. "
-            "Use clean Markdown formatting, bullet points, and bold keys for scannability. "
-            "If asked about UK domicile fees, explicitly highlight the regional discount. "
-            "If details cannot be found in the context, advise the user to contact admission@amrapali.ac.in or call campus desk.\n\n"
+            "Answer politely and professionally using ONLY the provided context. "
+            "Use clear bullet points and bold keys. "
+            "If details cannot be found, advise contacting admission@amrapali.ac.in.\n\n"
             f"Context Data:\n{context_text}"
         )
 
         def stream_response():
-            response_stream = client.models.generate_content_stream(
-                model="gemini-3.6-flash",
-                contents=user_query,
-                config={"system_instruction": system_instruction}
-            )
-            for chunk in response_stream:
-                if chunk.text:
-                    yield chunk.text
+            try:
+                response_stream = client.models.generate_content_stream(
+                    model=ACTIVE_MODEL,
+                    contents=user_query,
+                    config={"system_instruction": system_instruction}
+                )
+                for chunk in response_stream:
+                    if chunk.text:
+                        yield chunk.text
+            except Exception as err:
+                yield f"Error calling {ACTIVE_MODEL}: {str(err)}"
 
         reply = st.write_stream(stream_response)
         st.session_state.messages.append({"role": "assistant", "content": reply})
