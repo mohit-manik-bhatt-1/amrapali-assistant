@@ -48,22 +48,80 @@
                 │
                 ▼
      [ Real-Time Streamed Output ]
-📋 Comparative AnalysisDimensionStandard Campus ChatbotsAmrapali AI AssistantResponse Latency4–7 seconds batch waitInstant sub-second token streamingContext GroundingGeneric public LLM memoryChromaDB vector retrieval (Strict RAG)State Quota IntelligenceIgnores domicile statusAutomates 25% Uttarakhand concessionInterface ControlsSingle plain prompt inputAction chips, session reset, export toolCredential SecurityRisk of hardcoded tokensEncrypted Cloud Secrets management🗂️ Project StructurePlaintextamrapali-assistant/
+```
+
+---
+
+## 📋 Comparative Analysis
+
+| Dimension | Standard Campus Chatbots | Amrapali AI Assistant |
+| :--- | :--- | :--- |
+| **Response Latency** | 4–7 seconds batch wait | **Instant sub-second token streaming** |
+| **Context Grounding** | Generic public LLM memory | **ChromaDB vector retrieval (Strict RAG)** |
+| **State Quota Intelligence** | Ignores domicile status | **Automates 25% Uttarakhand concession** |
+| **Interface Controls** | Single plain prompt input | **Action chips, session reset, export tool** |
+| **Credential Security** | Risk of hardcoded tokens | **Encrypted Cloud Secrets management** |
+
+---
+
+## 🗂️ Project Structure
+
+```text
+amrapali-assistant/
 ├── .streamlit/
 │   └── secrets.toml          # Local environment API keys (git-ignored)
 ├── amrapali_data.txt         # University prospectus, courses, fees, hostels
 ├── requirements.txt          # Production dependencies
 ├── streamlit_app.py          # Main application & interactive UI
 └── README.md                 # Project architecture & documentation
-⚙️ Local Setup & Deployment1. Clone RepositoryBashgit clone [https://github.com/mohit-manik-bhatt-1/amrapali-assistant.git](https://github.com/mohit-manik-bhatt-1/amrapali-assistant.git)
+```
+
+---
+
+## ⚙️ Local Setup & Deployment
+
+**1. Clone Repository**
+```bash
+git clone [https://github.com/mohit-manik-bhatt-1/amrapali-assistant.git](https://github.com/mohit-manik-bhatt-1/amrapali-assistant.git)
 cd amrapali-assistant
-2. Configure EnvironmentBashpython -m venv venv
+```
+
+**2. Configure Environment**
+```bash
+python -m venv venv
 # Windows:
 venv\Scripts\activate
 # Linux/macOS:
 source venv/bin/activate
 
 pip install -r requirements.txt
-3. Configure CredentialsCreate .streamlit/secrets.toml and add your inference key:Ini, TOMLGROQ_API_KEY = "gsk_..."
-4. Launch Local InstanceBashstreamlit run streamlit_app.py
-📚 Knowledge Domain CoverageFaculty of Technology & Computer Applications: MCA, BCA, B.Tech (CSE, AI/ML, Data Science).Faculty of Commerce & Business Management: MBA (Dual Specialization), BBA, B.Com (Hons).Faculty of Hospitality Management: BHM, BHMCT, Professional Culinary Diplomas.Faculty of Pharmacy & Education: B.Pharm, D.Pharm, B.Ed.Campus Life & Logistics: 19-acre infrastructure, hostel allotment rules, mess plans, and CTPD placement records.👨‍💻 Author & MaintainerDeveloper: Mohit Manik BhattDepartment: Master of Computer Applications (MCA)Institution: Amrapali University, Haldwani
+```
+
+**3. Configure Credentials**
+Create `.streamlit/secrets.toml` and add your inference key:
+```toml
+GROQ_API_KEY = "gsk_..."
+```
+
+**4. Launch Local Instance**
+```bash
+streamlit run streamlit_app.py
+```
+
+---
+
+## 📚 Knowledge Domain Coverage
+
+* **Faculty of Technology & Computer Applications:** MCA, BCA, B.Tech (CSE, AI/ML, Data Science).
+* **Faculty of Commerce & Business Management:** MBA (Dual Specialization), BBA, B.Com (Hons).
+* **Faculty of Hospitality Management:** BHM, BHMCT, Professional Culinary Diplomas.
+* **Faculty of Pharmacy & Education:** B.Pharm, D.Pharm, B.Ed.
+* **Campus Life & Logistics:** 19-acre infrastructure, hostel allotment rules, mess plans, and CTPD placement records.
+
+---
+
+## 👨‍💻 Author & Maintainer
+
+* **Developer:** Mohit Manik Bhatt
+* **Department:** Master of Computer Applications (MCA)
+* **Institution:** Amrapali University, Haldwani
